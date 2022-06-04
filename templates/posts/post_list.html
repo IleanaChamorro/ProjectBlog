@@ -2,8 +2,26 @@
 
 {% block content %}
 <div class="container">
+    <div class="row">
     {% for object in object_list %}
-        {{object.title}}
+    <div class="col-4">
+        <a href="{{ object.get_absolute_url }}">
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="{{object.thumbnail.url}}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">{{object.title}}</h5>
+              <p class="card-text">{{object.content|truncatechars:9}}</p>
+              <hr/>
+              <p>
+                <span>view count</span>
+                <span>like count</span>
+                <span>comment count</span>
+              </p>
+            </div>
+          </div>
+        </a>
+    </div>
     {% endfor %}
+    </div>
 </div>
 {% endblock content %}
