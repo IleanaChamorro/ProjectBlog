@@ -25,6 +25,19 @@ class Post(models.Model):
         return reverse("detail", kwargs={
             'slug': self.slug
         })
+
+    @property
+    def get_comment_count(self):
+        return self.comment_set.all().count()
+    
+    @property
+    def get_view_count(self):
+        return self.postview_set.all().count()
+    
+    @property
+    def get_like_count(self):
+        return self.like_set.all().count()
+    
     
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -34,6 +47,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.user.username
+
 
 class PostView(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
