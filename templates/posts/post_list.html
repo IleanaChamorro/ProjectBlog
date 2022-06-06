@@ -6,7 +6,7 @@
     {% for object in object_list %}
     <div class="col-4">
       <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="{{object.thumbnail.url}}" alt="Card image cap">
+        <img class="card-img-top" src="{{object.thumbnail.url}}" alt="Card image cap" style="display: block; max-width:100%: height: auto;">
         <div class="card-body">
               <a href="{{ object.get_absolute_url }}">
                 <h5 class="card-title">{{object.title}}</h5>

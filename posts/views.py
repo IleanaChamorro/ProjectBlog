@@ -9,6 +9,14 @@ class PostListView(ListView):
 class PostDetailView(DetailView):
     model = Post
 
+    #Contar vistas
+    def get_object(self, **kwargs):
+        object = super().get_object(**kwargs)
+        #Si el usuario esta autenticado se cuenta la vista 
+        if self.request.user.is_authenticated:
+            PostView.objects.get_or_create(user=self.request.user, post=object)
+        return object
+
 class PostCreateView(CreateView):
     form_class = PostForm
     model = Post
