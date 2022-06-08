@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
 
 {% block content %}
     <div class="row">
@@ -33,6 +35,29 @@
                 </a>
             </div>
 
+            <hr/>
+            {% if request.user.is_authenticated %}
+                <h4>Deja un comentario debajo!</h4>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy}}
+                    <button class="btn btn-primary">Comentar</button>
+                </form>
+
+                <hr/>
+                <h5>Comentarios</h5>
+                {% for comment in object.comments %}
+                    <div>
+                        <p>{{ comment.content}}
+                            <br/>
+                            <small>hace {{ comment.timestamp|timesince}} </small>
+                        </p>
+                    </div>
+                    <hr/>
+                {% endfor %}
+            {% else %}
+            <a href="{% url 'account_login '%} class="btn btn-primary btn-block">Ingresa para comentar</a>
+            {% endif %}
             </div>
         </div>
     </div>
