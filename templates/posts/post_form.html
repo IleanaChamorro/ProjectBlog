@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container">
-    <h1>vista {{ view_type }}</h1>
+    <h1>{{ view_type }} POST</h1>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{form|crispy}}

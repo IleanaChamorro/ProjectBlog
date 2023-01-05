@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <div class="container">
     <div class="row">
     {% for object in object_list %}
-    <div class="col-4">
+    <div class="col-md-4">
       <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="{{object.thumbnail.url}}" alt="Card image cap" style="display: block; max-width:100%: height: auto;">
-        <div class="card-body">
+        <img class="img-fluid" src="{{object.thumbnail.url}}" alt="Card image cap">
+        <div class="card-body cold-md-8">
               <a href="{{ object.get_absolute_url }}">
                 <h5 class="card-title">{{object.title}}</h5>
               </a>
@@ -15,11 +15,12 @@
               <hr/>
               <p>
                 <span><i class="fas fa-thumbs-up ml-2"> </i>{{ object.get_like_count}}</span>
+                <span><i class="fas fa-thumbs-down ml-2"> </i>{{ object.get_dislike_count}}</span>
                 <span><i class="fas fa-eye ml-2"> </i>{{ object.get_view_count}}</span>
                 <span class="float-right"><i class="fas fa-comments ml-2"> </i>{{ object.get_comment_count}}</span>
               </p>
               <p class="card-text">
-                  Posted {{object.publish_date|timesince}} ago
+                  Posteado hace {{object.publish_date|timesince}} 
               </p>
             </div>
         </div>

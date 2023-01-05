@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.shortcuts import reverse
-#User, Email, Password
+
+
 class User(AbstractUser):
     pass
 
@@ -31,6 +32,11 @@ class Post(models.Model):
             'slug': self.slug
         })
 
+    def get_dislike_url(self):
+        return reverse("dislike", kwargs={
+            'slug': self.slug
+        })
+
     @property
     def comments(self):
         return self.comment_set.all()
@@ -46,6 +52,10 @@ class Post(models.Model):
     @property
     def get_like_count(self):
         return self.like_set.all().count()
+    
+    @property
+    def get_dislike_count(self):
+        return self.dislike_set.all().count()
     
     
 class Comment(models.Model):

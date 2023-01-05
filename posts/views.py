@@ -9,23 +9,21 @@ class PostListView(ListView):
 class PostDetailView(DetailView):
     model = Post
 
-    #Comentarios de usuarios
     def post(self, *args, **kwargs):
         form = CommentForm(self.request.POST)
     
-    #Si el formulario es valido, se obtiene una instancia de este para que el usuario pueda dejar un comentario
+    #If the form is valid, an instance of it is obtained so that the user can leave a comment
         if form.is_valid():
             post = self.get_object()
             comment = form.instance
             comment.user = self.request.user
             comment.post = post
-            #Guardar comentario
             comment.save()
-            #Luego de realizar el comentario, se redirige al home
+            #After the user leaves their comment,he is redirected to the home
             return redirect("detail", slug=post.slug)
 
-        #En caso de que no sea valido el post
         return redirect("detail", slug=self.get_object().slug)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
@@ -33,22 +31,24 @@ class PostDetailView(DetailView):
         })
         return context
     
-    #Contar vistas de usuario
+    #View Counter
     def get_object(self, **kwargs):
         object = super().get_object(**kwargs)
-        #Si el usuario esta autenticado se cuenta la vista 
+        #The view is only counted if the user is authenticated
         if self.request.user.is_authenticated:
             PostView.objects.get_or_create(user=self.request.user, post=object)
         return object
 
 
-#Crear Post 
+#Create a Post
 class PostCreateView(CreateView):
     form_class = PostForm
     model = Post
-    #Una vez creado, redirigir al home
+    #After creating the post, the user is redirected to home
     success_url = '/'
 
+
+    #Get data to create post 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
@@ -56,13 +56,14 @@ class PostCreateView(CreateView):
         })
         return context
     
-#Actualizar Post
+#Update Post View
 class PostUpdateView(UpdateView):
     form_class = PostForm
     model = Post
-    #Una vez  actualizado, redirigir al home
+    #After updating the post, the user is redirected to home
     success_url = '/'
 
+    #Get data to update the post
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
@@ -70,21 +71,34 @@ class PostUpdateView(UpdateView):
         })
         return context
     
-#Borrar Post
+#Delete Post
 class PostDeleteView(DeleteView):
     model = Post
-    #Una vez borrado el post, redirigir al home
+    #After deleting the post, the user is redirected to home
     success_url = '/'
 
 def like(request, slug):
     post = get_object_or_404(Post, slug=slug)
     like_qs = Like.objects.filter(user=request.user, post=post)
 
-    #En caso de que el like exista el usuario puede sacar su like 
+    #In case the like exists, the user can remove his like
     if like_qs.exists():
         like_qs[0].delete()
         return redirect('detail', slug=slug)
 
-    #En caso de que el usuario no haya dado like, puede hacerlo 
+    #In case the user has not given a like, he can do it
     Like.objects.create(user=request.user, post=post)
+    return redirect('detail',slug=slug)
+
+def dislike(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    dislike_qs = DisLike.objects.filter(user=request.user, post=post)
+
+    #In case the dislike exists, the user can remove his dislike 
+    if dislike_qs.exists():
+        dislike_qs[0].delete()
+        return redirect('detail', slug=slug)
+
+    #In case the user has not given a like, he can do it
+    DisLike.objects.create(user=request.user, post=post)
     return redirect('detail',slug=slug)

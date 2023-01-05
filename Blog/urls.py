@@ -9,7 +9,8 @@ from posts.views import(
     PostDeleteView,
     PostListView,
     PostUpdateView,
-    like
+    like,
+    dislike,
 )
 
 urlpatterns = [
@@ -20,7 +21,8 @@ urlpatterns = [
     path('<slug>/', PostDetailView.as_view(), name='detail'),
     path('<slug>/update/', PostUpdateView.as_view(), name='update'),
     path('<slug>/delete/', PostDeleteView.as_view(), name='delete'),
-    path('like/<slug>/', like, name="like")
+    path('like/<slug>/', like, name="like"),
+    path('dislike/<slug>/', dislike, name="dislike")
 ]
 
 
